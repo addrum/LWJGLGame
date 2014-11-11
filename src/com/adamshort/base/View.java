@@ -16,12 +16,14 @@ public class View {
 	private int fps;
 	// is vsync enabled
 	private boolean vsync;
+	private int width = 800;
+	private int height = 600;
 
-	Quad quad1 = new Quad();
+	Quad quad1 = new Quad(400, 300);
 
 	public void start() {
 		try {
-			Display.setDisplayMode(new DisplayMode(800, 600));
+			Display.setDisplayMode(new DisplayMode(width, height));
 			Display.create();
 		} catch (LWJGLException e) {
 			e.printStackTrace();
@@ -38,7 +40,7 @@ public class View {
 		while (!Display.isCloseRequested()) {
 			int delta = getDelta();
 
-			update(delta);
+			update();
 			renderGL();
 
 			Control control = new Control(quad1, delta, this);
@@ -52,19 +54,19 @@ public class View {
 		Display.destroy();
 	}
 
-	public void update(int delta) {
+	public void update() {
 
 		float quad1Y = quad1.getY();
 		float quad1X = quad1.getX();
 		// keep quad on the screen
-		if (quad1Y < 0)
-			quad1.setY(0);
-		if (quad1X < 0)
-			quad1.setX(0);
-		if (quad1Y > 600)
-			quad1.setY(600);
-		if (quad1X > 800)
-			quad1.setX(800);
+		if (quad1Y < (quad1.getHeight() / 2))
+			quad1.setY(quad1.getHeight() / 2);
+		if (quad1X < (quad1.getWidth() / 2))
+			quad1.setX(quad1.getWidth() / 2);
+		if (quad1Y > height - (quad1.getHeight() / 2))
+			quad1.setY(height - (quad1.getHeight() / 2));
+		if (quad1X > width - (quad1.getWidth() / 2))
+			quad1.setX(width - (quad1.getWidth() / 2));
 
 		updateFPS();
 	}
@@ -98,7 +100,7 @@ public class View {
 	private void initGL() {
 		GL11.glMatrixMode(GL11.GL_PROJECTION);
 		GL11.glLoadIdentity();
-		GL11.glOrtho(0, 800, 0, 600, 1, -1);
+		GL11.glOrtho(0, width, 0, height, 1, -1);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 	}
 
@@ -118,26 +120,27 @@ public class View {
 		if ((Display.getDisplayMode().getWidth() == width) && (Display.getDisplayMode().getHeight() == height) && (Display.isFullscreen() == fullscreen)) {
 			return;
 		}
-		
+
 		try {
 			DisplayMode targetDisplayMode = null;
-			
+
 			if (fullscreen) {
 				DisplayMode[] modes = Display.getAvailableDisplayModes();
 				int freq = 0;
-				
+
 				for (int i = 0; i < modes.length; i++) {
 					DisplayMode current = modes[i];
-					
+
 					if ((current.getWidth() == width) && (current.getHeight() == height)) {
 						if ((targetDisplayMode == null) || (current.getBitsPerPixel() > targetDisplayMode.getBitsPerPixel())) {
 							targetDisplayMode = current;
 							freq = targetDisplayMode.getFrequency();
 						}
 					}
-					
+
 					// if we've found a match for bpp and frequence against the
-					// original display mode then it's probably best to go for this one
+					// original display mode then it's probably best to go for
+					// this one
 					// since it's most likely compatible with the monitor
 					if ((current.getBitsPerPixel() == Display.getDesktopDisplayMode().getBitsPerPixel()) && (current.getFrequency() == Display.getDesktopDisplayMode().getFrequency())) {
 						targetDisplayMode = current;
@@ -147,25 +150,25 @@ public class View {
 			} else {
 				targetDisplayMode = new DisplayMode(width, height);
 			}
-			
+
 			if (targetDisplayMode == null) {
 				System.out.println("Failed to find value mode: " + width + "x" + height + " fs=" + fullscreen);
 				return;
 			}
-			
+
 			Display.setDisplayMode(targetDisplayMode);
 			Display.setFullscreen(fullscreen);
 		} catch (LWJGLException e) {
 			System.out.println("Unable to setup mode " + width + "x" + height + "fullscreen=" + fullscreen + e);
 		}
 	}
-	
+
 	public void setVsync(boolean vsync) {
 		this.vsync = vsync;
 	}
-	
+
 	public boolean isVsync() {
 		return vsync;
 	}
-	
+
 }

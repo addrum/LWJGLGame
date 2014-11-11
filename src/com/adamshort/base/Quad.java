@@ -4,9 +4,20 @@ import org.lwjgl.opengl.GL11;
 
 public class Quad {
 	
-	private float x, y, rotation;
+	protected float x, y;
+	
+	private float rotation = 0;
+	private int width, height;
+	
 	public enum Direction {
 		LEFT, RIGHT, UP, DOWN;
+	}
+	
+	protected Quad(float x, float y) {
+		this.x = x;
+		this.y = y;
+		width = 100;
+		height = 100;
 	}
 
 	public void drawQuad() {
@@ -28,14 +39,14 @@ public class Quad {
 		GL11.glColor3f(r, g, b);
 	}
 	
-	public void rotateQuad(float interval, int delta, Direction direction) {
+	public void rotateQuad(float rotation, int delta, Direction direction) {
 		switch (direction) {
 			case LEFT: {
-				rotation += interval * delta;
+				this.rotation += rotation * delta;
 				break;
 			}
 			case RIGHT: {
-				rotation -= interval * delta;
+				this.rotation -= rotation * delta;
 				break;
 			}
 			default: {
@@ -58,6 +69,14 @@ public class Quad {
 	
 	public float getY() {
 		return y;
+	}
+	
+	public int getWidth() {
+		return width;
+	}
+	
+	public int getHeight() {
+		return height;
 	}
 
 }

@@ -4,8 +4,6 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 
-import com.adamshort.base.Quad.Direction;
-
 public class Control {
 
 	private Quad quad1;
@@ -39,7 +37,7 @@ public class Control {
 				if (Keyboard.isRepeatEvent()) {
 					float quad1X = quad1.getX();
 					quad1.setX(quad1X -= 0.35f * delta);
-					quad1.rotateQuad(0.35f, delta, Direction.LEFT);
+					// quad1.rotateQuad(0.15f, delta, Direction.LEFT);
 				}
 			}
 		}
@@ -56,12 +54,30 @@ public class Control {
 				if (Keyboard.isRepeatEvent()) {
 					float quad1X = quad1.getX();
 					quad1.setX(quad1X += 0.35f * delta);
-					quad1.rotateQuad(0.35f, delta, Direction.RIGHT);
+					// quad1.rotateQuad(0.15f, delta, Direction.RIGHT);
 				}
 			}
 		}
 		while (Keyboard.next()) {
 			if (Keyboard.getEventKeyState()) {
+				if (Keyboard.getEventKey() == Keyboard.KEY_W || Keyboard.getEventKey() == Keyboard.KEY_UP) {
+					float quad1Y = quad1.getY();
+					quad1.setY(quad1Y += 0.35f * delta);
+				}
+				if (Keyboard.getEventKey() == Keyboard.KEY_A || Keyboard.getEventKey() == Keyboard.KEY_LEFT) {
+					float quad1X = quad1.getX();
+					quad1.setX(quad1X -= 0.35f * delta);
+					// quad1.rotateQuad(0.35f, delta, Direction.LEFT);
+				}
+				if (Keyboard.getEventKey() == Keyboard.KEY_S || Keyboard.getEventKey() == Keyboard.KEY_DOWN) {
+					float quad1Y = quad1.getY();
+					quad1.setY(quad1Y -= 0.35f * delta);
+				}
+				if (Keyboard.getEventKey() == Keyboard.KEY_D || Keyboard.getEventKey() == Keyboard.KEY_RIGHT) {
+					float quad1X = quad1.getX();
+					quad1.setX(quad1X += 0.35f * delta);
+					// quad1.rotateQuad(0.35f, delta, Direction.RIGHT);
+				}
 				if (Keyboard.getEventKey() == Keyboard.KEY_F) {
 					view.setDisplayMode(800, 600, !Display.isFullscreen());
 					System.out.println("Gone fullscreen? " + Display.isFullscreen());
@@ -72,5 +88,9 @@ public class Control {
 				}
 			}
 		}
+	}
+	
+	public void move() {
+		
 	}
 }
