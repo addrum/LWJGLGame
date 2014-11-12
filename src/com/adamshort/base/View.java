@@ -16,10 +16,17 @@ public class View {
 	private int fps;
 	// is vsync enabled
 	private boolean vsync;
-	private int width = 800;
-	private int height = 600;
+	private int width;
+	private int height;
 
 	Quad quad1 = new Quad(400, 300);
+	
+	// @param width the width of the window
+	// @param height the height of the window
+	public View(int width, int height) {
+		this.width = width;
+		this.height = height;
+	}
 
 	public void start() {
 		try {
@@ -37,14 +44,9 @@ public class View {
 		// call before loop to initialise fps timer
 		lastFPS = getTime();
 
-		while (!Display.isCloseRequested()) {
-			int delta = getDelta();
-
+		while (!Display.isCloseRequested() && Game.gameRunning) {
 			update();
 			renderGL();
-
-			Control control = new Control(quad1, delta, this);
-			control.keyboardEvents();
 
 			Display.update();
 			// change parameter to cap frames to that number
@@ -169,6 +171,14 @@ public class View {
 
 	public boolean isVsync() {
 		return vsync;
+	}
+	
+	public int getWidth() {
+		return width;
+	}
+	
+	public int getHeight() {
+		return height;
 	}
 
 }

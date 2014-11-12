@@ -4,13 +4,12 @@ public class PlayerEntity extends Entity {
 
 	private Game game;
 
-	protected PlayerEntity(Game game, float x, float y, int health) {
+	protected PlayerEntity(int x, int y, int health) {
 		super(x, y, health);
-		this.game = game;
 	}
 
-	public void move(long delta) {
-		super.move(delta);
+	public void move(Direction direction, long delta) {
+		super.move(direction, delta);
 	}
 
 	// notification that this entity collided with another

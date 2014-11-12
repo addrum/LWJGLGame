@@ -7,7 +7,6 @@ import org.lwjgl.opengl.GL11;
 public abstract class Entity {
 	
 	protected float x, y, dx, dy;
-	
 	private float rotation = 0;
 	private int width, height, health;
 	
@@ -20,7 +19,9 @@ public abstract class Entity {
 		LEFT, RIGHT, UP, DOWN;
 	}
 	
-	protected Entity(float x, float y, int health) {
+	// @param x the initial x location of this entity
+    // @param y the initial y location of this entity
+	protected Entity(int x, int y, int health) {
 		this.x = x;
 		this.y = y;
 		this.health = health;
@@ -28,7 +29,28 @@ public abstract class Entity {
 		height = 100;
 	}
 	
-	public void move(long delta) {
+	public void move(Direction direction, long delta) {
+		switch (direction) {
+		case LEFT: {
+			x -= (delta * dx) / 1000;
+			break;
+		}
+		case RIGHT: {
+			x += (delta * dx) / 1000;
+			break;
+		}
+		case UP: {
+			y -= (delta * dy) / 1000;
+			break;
+		}
+		case DOWN: {
+			y += (delta * dy) / 1000;
+			break;
+		}
+		default: {
+			throw new IllegalArgumentException("Waah! Can't process: " + direction);
+		}
+		}
 		// update location of entity based on move speeds
 		x += (delta * dx) / 1000;
 		y += (delta * dy) / 1000;
